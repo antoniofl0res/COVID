@@ -2,7 +2,7 @@
 
 ## load Brazil data - up-to-date file can be downloaded from https://brasil.io/dataset/covid19/files/
 
-br <- read.csv("BR0424.csv", header = TRUE)
+br <- read.csv("BR0425.csv", header = TRUE) ## file name needs to be updated accordingly
 br$date <- as.Date(br$date)
 
 ## replace funny characters - state capitals
