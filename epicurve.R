@@ -29,6 +29,8 @@ st <- subset(br, place_type=="state") ## state-only data, no municipalities
 world <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
 world$date <- as.Date(world$date)
 
+library(dplyr)
+
 #### FUNCTIONS ###
 
 covid <- function(place, place_type, initial_date) {
@@ -51,7 +53,7 @@ covid <- function(place, place_type, initial_date) {
   else if(place_type==3){inc <- uf$total_cases}
   else(print("place_type should be 1, 2 or 3. Please check your command"))
   
-  cmm <- (dplyr::lag(inc, 1)-dplyr::lag(inc,8))/7
+  cmm <- (lag(inc, 1)-lag(inc,8))/7
   cmm <- cmm[!is.na(cmm)]
   inc.title <- c("Incidence (7-day rolling average) from", initial_date)
   plot.cases <- plot(cmm, type="l", col="darkblue",  xlab= "Days elapsed since initial date", ylab="Cases", main=inc.title, sub=place.label)
@@ -63,7 +65,7 @@ covid <- function(place, place_type, initial_date) {
   else(print("place_type should be 1, 2 or 3. Please check your command"))
  
 
-  cmmr <- (dplyr::lag(incr, 1)-dplyr::lag(incr,8))/7
+  cmmr <- (lag(incr, 1)-lag(incr,8))/7
   cmmr <- cmmr[!is.na(cmmr)]
   incr.title <- c("Incidence rate (7-day rolling average) from", initial_date)
   plot.incr <- plot(cmmr, type="l", col="darkblue",  xlab= "Days elapsed since initial date", ylab="Cases per 100K", main=incr.title, sub=place.label)
@@ -73,7 +75,7 @@ covid <- function(place, place_type, initial_date) {
   median.incr <- round(median(cmmr),1)
   current.incr <- round(median(tail(cmmr)),1)
   
-  cchange <- dplyr::lag(cmm, 2)/dplyr::lag(cmm, 16)
+  cchange <- lag(cmm, 2)/lag(cmm, 16)
   cchange <- cchange[!is.na(cchange)]
   
   cchange.title <- c("Change in incidence over the previous 2 weeks", "- period analyzed starts on", initial_date) ## 
@@ -86,7 +88,7 @@ covid <- function(place, place_type, initial_date) {
   else if(place_type==3){mort <- uf$total_deaths}
   else(print("place_type should be 1, 2 or 3. Please check your command"))
   
-  mmm <- (dplyr::lag(mort,1)-dplyr::lag(mort,8))/7
+  mmm <- (lag(mort,1)-lag(mort,8))/7
   mmm <- mmm[!is.na(mmm)]
   mort.title <- c("Mortality (7-day rolling average) from", initial_date)
   plot.deaths <- plot(mmm, type="l", col="red", xlab= "Days elapsed since initial date", ylab="Deaths", main=mort.title, sub=place.label)
@@ -95,7 +97,7 @@ covid <- function(place, place_type, initial_date) {
   if(place_type==1 | place_type==2){mortr <- uf$last_available_deaths/uf$estimated_population*10^5}
   else if(place_type==3){mortr <- uf$total_deaths/uf$population*10^5}
   
-  mmmr <- (dplyr::lag(mortr, 1)-dplyr::lag(mortr,8))/7
+  mmmr <- (lag(mortr, 1)-lag(mortr,8))/7
   mmmr <- mmmr[!is.na(mmmr)]
   mortr.title <- c("Mortality rate (7-day rolling average) from", initial_date)
   plot.mortr <- plot(mmmr, type="l", col="red", xlab= "Days elapsed since initial date", ylab="Deaths per 100K", main=mortr.title, sub=place.label)
@@ -105,7 +107,7 @@ covid <- function(place, place_type, initial_date) {
   median.mortr <- round(median(mmmr),1)
   current.mortr <- round(median(tail(mmmr)),1)
   
-  dchange <- dplyr::lag(mmm, 2)/dplyr::lag(mmm, 16)
+  dchange <- lag(mmm, 2)/lag(mmm, 16)
   dchange <- dchange[!is.na(dchange)]
   
   dchange.title <- c("Change in mortality over the previous 2 weeks", " - period analyzed starts on", initial_date)
