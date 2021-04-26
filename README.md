@@ -15,8 +15,8 @@ Finally, the output also includes population, incidence rates (at the beginning 
 
 Parameters:  
 *place*: municipality, state or country  
-  * municipality: enter the name of the municipality between quotation marks or its IBGE code. Eg, "Porto Alegre" or 4314902. Note that some municipalities in different states may have the same name, while the IBGE code is unique - so, prefer to use it. Also, some municipalitis' names may be accented - call View(br), look up the municipality, then copy and paste the name with special characters. Eg, Ji-Paraná = Ji-ParanÃ¡. Likewise, using the unique IBGE code speeds up execution of the code
-  * state: enter the standard two-letter acronym for the state between quotation marks. Eg, Amazonas = "AM", Rondonia = "RO", Rio Grande do Sul = "RS", and so on. Call View(st) and the look up the acronym
+  * municipality: enter the name of the municipality between quotation marks or its IBGE code. Eg, "Porto Alegre" or 4314902. Note that some municipalities in different states may have the same name, while the IBGE code is unique - so, prefer to use the latter. Also, some municipalities' names may be accented - call View(br), look up the municipality, then copy and paste the name with special characters. Eg, Ji-Paraná = "Ji-ParanÃ¡". Likewise, using the unique IBGE code speeds up execution of the code.
+  * state: enter the standard two-letter acronym for the state between quotation marks. Eg, Amazonas = "AM", Rondonia = "RO", Rio Grande do Sul = "RS", and so on. Call View(st) and then look up the acronym
   * country: enter the three-letter country ISO code between quotation marks. Eg, Brazil = "BRA", Germany = "DEU, and so on. Call View(world), then look up the ISO code
 
 *place_type*: define type of place
@@ -34,14 +34,14 @@ Output of this function includes:
 * cumulative incidence, mortality and case-fatality ratio
 * date when first case was reported
 * days until incidence reached 0.1% and 1% of population
-* proportion of total cases in the last 15, 30 and 60 days
+* proportion of cases in the last 15, 30 and 60 days
 
 Parameters:  
 *place*: same as above  
 *place_type*: same as above  
 
 #### findbypop
-Filter municipalities by population in a determined state.  
+Filter municipalities by population in a determined state.
 For example: what are the cities in Roraima state with a population of 100 thousand or above?
 
 Parameters:
