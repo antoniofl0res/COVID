@@ -70,6 +70,7 @@ covid <- function(place, place_type, initial_date) {
   
   # Change in incidence
   initial.incr <- round(median(head(cmmr)),1)
+  median.incr <- round(median(cmmr),1)
   current.incr <- round(median(tail(cmmr)),1)
   
   cchange <- dplyr::lag(cmm, 2)/dplyr::lag(cmm, 16)
@@ -101,6 +102,7 @@ covid <- function(place, place_type, initial_date) {
   
   # Change in mortality - daily average
   initial.mortr <- round(median(head(mmmr)),1)
+  median.mortr <- round(median(mmmr),1)
   current.mortr <- round(median(tail(mmmr)),1)
   
   dchange <- dplyr::lag(mmm, 2)/dplyr::lag(mmm, 16)
@@ -111,9 +113,10 @@ covid <- function(place, place_type, initial_date) {
   
   
   initial.cfr <- round(median(head(mmm/cmm*100)),1)
+  median.cfr <- round(median(mmm/cmm*100),1)
   current.cfr <- round(median(tail(mmm/cmm*100)),1)
   
-  summary.cov <- list("Population"=pop, "Incidence rate (daily, per 100K)" = c(initial.incr, current.incr), "Mortality rate (daily, per 100K)" = c(initial.mortr, current.mortr), "CFR (%)" = c(initial.cfr, current.cfr))
+  summary.cov <- list("Population"=pop, "Incidence rate (daily, per 100K)" = c(initial.incr, median.incr, current.incr), "Mortality rate (daily, per 100K)" = c(initial.mortr, median.mortr, current.mortr), "CFR (%)" = c(initial.cfr, median.cfr, current.cfr))
   
   return(c(plot.cases, plot.incr, plot.deaths, plot.mortr, summary.cov))
 }
