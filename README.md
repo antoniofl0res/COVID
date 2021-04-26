@@ -11,7 +11,7 @@ The script includes 4 functions:
 #### covid
 With this function, you can create graphs of daily cases (7-day rolling average), daily incidence rate, daily deaths (7-day rolling average) and daily mortality rate by place.  
 In addition, two graphs are created to show change in incidence and mortality over the previous 2 weeks.  
-Finally, the output also includes population, incidence rates (at the beginning and at the end of the period), mortality rates (likewise, beginning and end) and case-fatality ratio (beginning and end)
+Finally, the output also includes population, incidence rates (at the beginning of the specified period, median and at the end of the period), mortality rates (likewise, beginning, median and end) and case-fatality ratio (beginning, median and end)
 
 Parameters:  
 *place*: municipality, state or country  
