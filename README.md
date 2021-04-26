@@ -2,9 +2,9 @@
 
 **epicurve.R** is a script for tracking the COVID epidemic in Brazil (at municipality and state levels) and in the world (at country level)
 
-The script uses two sources of data:
-- https://brasil.io/dataset/covid19/files/ - the .csv file has to be downloaded and updated on a daily basis
-- https://covid.ourworldindata.org/data/owid-covid-data.csv - data will be updated automaticaly every time the code is run
+The sources of data are:
+- https://brasil.io/dataset/covid19/files/ - Brazil (municipalities and states) - the .csv file has to be downloaded and updated on a daily basis for latest data
+- https://covid.ourworldindata.org/data/owid-covid-data.csv - global - data will be updated automatically every time the code is run
 
 The script includes 4 functions:
 
@@ -17,7 +17,7 @@ Parameters:
 *place*: municipality, state or country  
   * municipality: enter the name of the municipality between quotation marks or its IBGE code. Eg, "Porto Alegre" or 4314902. Note that some municipalities in different states may have the same name, while the IBGE code is unique - so, prefer to use the latter. Also, some municipalities' names may be accented - call View(br), look up the municipality, then copy and paste the name with special characters. Eg, Ji-Paraná = "Ji-ParanÃ¡". Likewise, using the unique IBGE code speeds up execution of the code.
   * state: enter the standard two-letter acronym for the state between quotation marks. Eg, Amazonas = "AM", Rondonia = "RO", Rio Grande do Sul = "RS", and so on. Call View(st) and then look up the acronym
-  * country: enter the three-letter country ISO code between quotation marks. Eg, Brazil = "BRA", Germany = "DEU, and so on. Call View(world), then look up the ISO code
+  * country: enter the three-letter country ISO code between quotation marks. Eg, Brazil = "BRA", Germany = "DEU", and so on. Call View(world), then look up the ISO code
 
 *place_type*: define type of place
 * 1 for municipality
