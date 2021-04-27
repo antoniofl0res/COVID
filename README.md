@@ -3,7 +3,7 @@
 **epicurve.R** is a script for tracking the COVID epidemic in Brazil (at municipality and state levels) and in the world (at country level)
 
 The sources of data are:
-- https://brasil.io/dataset/covid19/files/ - Brazil (municipalities and states) - the .csv file has to be downloaded and updated on a daily basis for latest data
+- https://brasil.io/dataset/covid19/files/ - Brazil (municipalities and states) - the .csv file (caso_full.csv) has to be downloaded and updated on a daily basis for latest data
 - https://covid.ourworldindata.org/data/owid-covid-data.csv - global - data will be updated automatically every time the code is run
 
 The script includes 4 functions:
