@@ -11,7 +11,7 @@ The script includes 4 functions:
 #### covid
 With this function, you can create graphs of daily cases (7-day rolling average), daily incidence rate, daily deaths (7-day rolling average) and daily mortality rate by place.  
 In addition, two graphs are created to show change in incidence and mortality over the previous 2 weeks.  
-Finally, the output also includes population, incidence rates (at the beginning of the specified period, median and at the end of the period), mortality rates (likewise, beginning, median and end) and case-fatality ratio (beginning, median and end)
+Finally, the output also includes population, incidence rates (at the beginning of the specified period, median and at the end of the period), mortality rates (likewise, beginning, median and end), peak absolute incidence and mortality (7-day rolling average) and case-fatality ratio (beginning, median and end)
 
 Parameters:  
 *place*: municipality, state or country  
@@ -25,6 +25,10 @@ Parameters:
 * 3 for country
 
 *initial_date*: define the start date of the period you wish to plot. Date format should be "YYYY-MM-DD" (between quotation marks)
+*end_date*: define the end date of the period you wish to plot. Date format should be "YYYY-MM-DD" (between quotation marks). Use *ld* for latest date (set the previous day, i.e., current date minus 1)
+
+#### covid.summary
+Returns the same output as the **covid** function without plots
 
  
 #### covid.profile
@@ -58,5 +62,6 @@ Parameters:
 *place2*  
 *place_type2*  
 *initial_date*  
+*end_date*
 
 Same instructions as for the covid funtion
