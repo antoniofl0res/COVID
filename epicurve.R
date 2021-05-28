@@ -2,7 +2,7 @@
 
 ## load Brazil data - up-to-date file can be downloaded from https://brasil.io/dataset/covid19/files/
 
-br <- read.csv("BR0524.csv", header = TRUE) ## file name needs to be updated accordingly
+br <- read.csv("caso_full.csv", header = TRUE) ## file needs to be updated accordingly
 br$date <- as.Date(br$date)
 
 
@@ -108,7 +108,6 @@ covid <- function(place, place_type, initial_date, end_date) {
   else if(place_type==3){mort <- uf$total_deaths}
   else(print("place_type should be 1, 2 or 3. Please check your command"))
   
-  daily.deaths <- lag(mort,2)-lag(mort,3)
   mmm <- (lag(mort,1)-lag(mort,8))/7
   mmm <- mmm[!is.na(mmm)]
   mort.title <- c("Mortality (7-day rolling average) from", initial_date)
@@ -151,19 +150,17 @@ covid <- function(place, place_type, initial_date, end_date) {
 
 
 covid.summary <- function(place, place_type, initial_date, end_date) {
-  if(place_type==1){  uf <- subset(br, br$place_type=="city" & (br$city==place | br$city_ibge_code==place) & (br$date>=initial_date & br$date<=end_date))
+  if(place_type==1){uf <- subset(br, br$place_type=="city" & (br$city==place | br$city_ibge_code==place) & (br$date>=initial_date & br$date<=end_date))
   pop <- br$estimated_population[(br$city==place | br$city_ibge_code==place) & br$is_last=="True"]
   pop <- unique(pop[!is.na(pop)])
   place.label <- unique(uf$city)}
-  else if(place_type==2){  uf <- subset(st, st$state==place & st$date>=initial_date & st$date<=end_date)
+  else if(place_type==2){uf <- subset(st, st$state==place & st$date>=initial_date & st$date<=end_date)
   pop <- st$estimated_population[st$state==place & st$is_last=="True"]
   place.label <- unique(uf$state)}
-  else if(place_type==3){  uf <- subset(world, world$iso_code==place & (world$date>=initial_date & world$date<=end_date))
+  else if(place_type==3){uf <- subset(world, world$iso_code==place & world$date>=initial_date & world$date<=end_date)
   pop <- unique(world$population[world$iso_code==place])
   place.label <- unique(uf$location)}
   else(print("place_type should be 1, 2 or 3. Please check your command"))
-  
-  
   
   
   ### Incidence
@@ -172,8 +169,11 @@ covid.summary <- function(place, place_type, initial_date, end_date) {
   else if(place_type==3){inc <- uf$total_cases}
   else(print("place_type should be 1, 2 or 3. Please check your command"))
   
-  cmm <- (lag(inc, 3)-lag(inc,10))/7 
+  
+  cmm <- (lag(inc, 1)-lag(inc,8))/7 
   cmm <- cmm[!is.na(cmm)]
+  inc.title <- c("Incidence (7-day rolling average) from", initial_date)
+  plot.cases <- plot(cmm, type="l", col="darkblue", xlab= "Days elapsed since initial date + 7 days", ylab="Cases", main=inc.title, sub=place.label)+abline(h=median(cmm), col="grey30")+abline(h=median(tail(cmm)), col="darkred", lty="dashed")+abline(h=median(head(cmm)), col="grey40", lty="dashed")
   
   
   # Incidence rate
@@ -182,9 +182,9 @@ covid.summary <- function(place, place_type, initial_date, end_date) {
   else(print("place_type should be 1, 2 or 3. Please check your command"))
   
   
-  cmmr <- (lag(incr, 3)-lag(incr,10))/7
+  cmmr <- (lag(incr, 1)-lag(incr,8))/7
   cmmr <- cmmr[!is.na(cmmr)]
-  
+ 
   # Change in incidence
   initial.inc <- round(median(head(cmm)),0)
   median.inc <- round(median(cmm),0)
@@ -194,10 +194,6 @@ covid.summary <- function(place, place_type, initial_date, end_date) {
   median.incr <- round(median(cmmr),1)
   current.incr <- round(median(tail(cmmr)),1)
   
-  cchange <- cmmr/lag(cmmr, 14)
-  cchange <- cchange[!is.na(cchange)]
-  
-  
   
   ### Mortality
   
@@ -206,14 +202,16 @@ covid.summary <- function(place, place_type, initial_date, end_date) {
   else if(place_type==3){mort <- uf$total_deaths}
   else(print("place_type should be 1, 2 or 3. Please check your command"))
   
-  mmm <- (lag(mort,3)-lag(mort,10))/7
+  mmm <- (lag(mort,1)-lag(mort,8))/7
   mmm <- mmm[!is.na(mmm)]
+  mort.title <- c("Mortality (7-day rolling average) from", initial_date)
+  plot.deaths <- plot(mmm, type="l", col="red", xlab= "Days elapsed since initial date + 7 days", ylab="Deaths", main=mort.title, sub=place.label)
   
   # Mortality rate - daily average
   if(place_type==1 | place_type==2){mortr <- uf$last_available_deaths/uf$estimated_population*10^5}
   else if(place_type==3){mortr <- uf$total_deaths/uf$population*10^5}
   
-  mmmr <- (lag(mortr, 3)-lag(mortr,10))/7
+  mmmr <- (lag(mortr, 1)-lag(mortr,8))/7
   mmmr <- mmmr[!is.na(mmmr)]
   
   # Change in mortality - daily average
@@ -225,20 +223,16 @@ covid.summary <- function(place, place_type, initial_date, end_date) {
   median.mortr <- round(median(mmmr),1)
   current.mortr <- round(median(tail(mmmr)),1)
   
-  dchange <- mmmr/lag(mmmr, 14)
-  dchange <- dchange[!is.na(dchange)]
-  
-  
   initial.cfr <- round(median(head(mmmr/cmmr*100)),1)
   median.cfr <- round(median(mmmr/cmmr*100),1)
   current.cfr <- round(median(tail(mmmr/cmmr*100)),1)
   
   
-  
-  summary.cov <- list("Place"=place.label, "Period"=c(unique(first(uf$date)), unique(last(uf$date))),  "Population"=pop, "Daily cases (7-day average - initial, median, current)"=c(initial.inc, median.inc, current.inc), "Incidence rate (daily, per 100K - initial, median, current)" = c(initial.incr, median.incr, current.incr), "Daily deaths (7-day average - initial, median, current)"=c(initial.mort, median.mort, current.mort), "Mortality rate (daily, per 100K - initial, median, current)" = c(initial.mortr, median.mortr, current.mortr), "CFR (%)" = c(initial.cfr, median.cfr, current.cfr))
+  summary.cov <- list("Place"=place.label, "Period"=c(unique(first(uf$date)), unique(last(uf$date))),  "Population"=pop, "Daily cases (7-day average - initial, median, current)"=c(initial.inc, median.inc, current.inc), "Incidence rate (daily, per 100K - initial, median, current)" = c(initial.incr, median.incr, current.incr), "Daily deaths (7-day average - initial, median, end)"=c(initial.mort, median.mort, current.mort), "Mortality rate (daily, per 100K - initial, median, end)" = c(initial.mortr, median.mortr, current.mortr), "Peak incidence and mortality"=c(round(max(cmm)), round(max(mmm))), "CFR (% - initial, median, end)" = c(initial.cfr, median.cfr, current.cfr))
   
   return(summary.cov)
 }
+
 
 ## Find municipalities by population
 
@@ -345,50 +339,6 @@ covid.profile <- function(place, place_type){
   return(list("Place"=place.label, "Population"=pop, "Total cases & deaths"=c(total.cases, total.deaths), "Cumulative incidence (per 100K) & mortality (per 100K) & CFR (%)"=c(cumulative.inc, cumulative.mort, CFR), "Date first case reported"=date.first.case, "Days to 100 & 1000 cases per 100K (0.1% & 1% of pop)"=c(days.inc.100, days.inc.1000), "% of cases in the last 15, 30 & 60 days"=c(perc.15days.round, perc.30days.round, perc.60days.round), "Trends"=list("Last 60 days as compared to the entire period of the epidemic (90% confidence)"=c(flag.60d), "Alerts"=list("Last 15 & 30 days"= c(flag.15.30, flag.30.60)))))
 }
 
-## covid.profile - all states in N and NE
-for (x in unique(st$state[st$region=="NE"])){print(c(covid.profile(x,2)))}
-for (x in unique(st$state[st$region=="S"])){print(c(covid(x,2, "2021-04-01", ld)))}
-
-for (x in unique(st$state[st$region=="W"])){print(c(covid(x,2, "2021-03-23")))}
-
-for (x in unique(world$iso_code[world$continent=="South America"])){print(c(covid.summary(x,3, "2021-03-23")))}
-
-for (x in unique(br$city_ibge_code[br$state=="RS" & br$estimated_population>=3.5*10^5 & br$place_type=="city"])){print(c(covid(x,1, "2021-03-21")))}
-
-
-##### UNUSED CODE
-flag.60d.50 <- ifelse(perc.60days>(expected.60d.50$conf.int[1]) & perc.60days<(expected.60d.50$conf.int[2]), "CASES WITHIN EXPECTED RANGE",
-                   ifelse(perc.60days>=expected.60d.50$conf.int[2], "MORE CASES THAN EXPECTED",
-                          ifelse(perc.60days<expected.60d.50$conf.int[1], "FEWER CASES THAN EXPECTED", "ERROR")))
-
-flag.60d.95 <- ifelse(perc.60days>(expected.60d.95$conf.int[1]) & perc.60days<(expected.60d.95$conf.int[2]), "CASES WITHIN EXPECTED RANGE",
-                      ifelse(perc.60days>=expected.60d.95$conf.int[2], "MORE CASES THAN EXPECTED",
-                             ifelse(perc.60days<expected.60d.95$conf.int[1], "FEWER CASES THAN EXPECTED", "ERROR")))
-
-flag.15.30.50 <- ifelse(change.15.30>0.4388894 & change.15.30<0.5611106, "STABLE",
-                     ifelse(change.15.30>=0.5611106, "UPWARD",
-                            ifelse(change.15.30<=0.4388894, "DOWNWARD", "ERROR")))
-flag.15.30.95 <- ifelse(change.15.30>0.3315413 & change.15.30<0.6684587, "STABLE",
-                        ifelse(change.15.30>=0.6684587, "UPWARD",
-                               ifelse(change.15.30<=0.3315413, "DOWNWARD", "ERROR")))
-
-flag.30.60.50 <- ifelse(change.30.60>0.456626 & change.15.30<0.543374, "STABLE",
-                        ifelse(change.15.30>=0.543374, "UPWARD",
-                               ifelse(change.15.30<=0.456626, "DOWNWARD", "ERROR")))
-flag.30.60.95 <- ifelse(change.30.60>0.3773502 & change.15.30<0.6226498, "STABLE",
-                        ifelse(change.15.30>=0.6226498, "UPWARD",
-                               ifelse(change.15.30<=0.3773502, "DOWNWARD", "ERROR")))
-
-flag1530 <- ifelse(pt$conf.int[1]<.5 & .5<pt$conf.int[2], "STABLE",
-                   ifelse(pt$conf.int[1]>.5 & pt$conf.int[1]<=.75, "UPWARD",
-                          ifelse(pt$conf.int[1]>.75, "UPWARD+", 
-                                 ifelse(pt$conf.int[2]>=.25 & pt$conf.int[2]<.5, "DOWNWARD",
-                                        ifelse(pt$conf.int[2]<.25, "DOWNWARD+", "ERROR")))))
-
-sg <- br[br$city=="SÃ£o Gabriel da Cachoeira" & br$epidemiological_week>=202053 & br$epidemiological_week<=202109, ]                          
-sg <- sg[sg$epidemiological_week!=202053,]
-sg.inc <- round((sg$last_available_confirmed-lag(sg$last_available_confirmed,7))/7)
-sg.incr <- sg.inc/sg$estimated_population*10^5
-sg.inc.week <- tapply(sg$new_confirmed, sg$epidemiological_week, sum)       
-sg.inc.week <- sg.inc.week[!is.na(sg.inc.week)]
-sg.inc.week
+## covid - all states in N and NE
+# change initial_date
+for (x in unique(st$state[st$region==c("N", "NE")])){print(c(covid(x,2, "2021-04-10", ld)))}
