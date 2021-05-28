@@ -6,7 +6,7 @@ The sources of data are:
 - https://brasil.io/dataset/covid19/files/ - Brazil (municipalities and states) - the .csv file (caso_full.csv) has to be downloaded and updated on a daily basis for latest data
 - https://covid.ourworldindata.org/data/owid-covid-data.csv - global - data will be updated automatically every time the code is run
 
-The script includes 4 functions:
+The script includes 5 functions:
 
 #### covid
 With this function, you can create graphs of daily cases (7-day rolling average), daily incidence rate, daily deaths (7-day rolling average) and daily mortality rate by place.  
@@ -65,3 +65,6 @@ Parameters:
 *end_date*
 
 Same instructions as for the **covid** function
+
+### for loop - automated covid function 
+This loop automates output for N & NE regions
