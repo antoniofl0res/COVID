@@ -49,7 +49,7 @@ Filter municipalities by population in a determined state.
 For example: what are the cities in Roraima state with a population of 100 thousand or above?
 
 Parameters:  
-*state*: enter the standard two-letter acronym for the state between quotation marks. Eg, Amazonas = "AM", Rondonia = "RO", Rio Grande do Sul = "RS", and so on. Call View(st) and the look up the acronym  
+*state*: enter the standard two-letter acronym for the state between quotation marks. Eg, Amazonas = "AM", Rondonia = "RO", Rio Grande do Sul = "RS", and so on. Call View(st) and then look up the acronym  
 *population*: enter a number. The function will filter all cities with a population equal or greater than the number you choose. Eg, 100000 or 10^5
 
 #### compare
@@ -64,4 +64,4 @@ Parameters:
 *initial_date*  
 *end_date*
 
-Same instructions as for the covid funtion
+Same instructions as for the **covid** function
