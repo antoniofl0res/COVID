@@ -244,8 +244,8 @@ findbypop <- function(state, population){
 
 ## Compare two places
 
-compare <- function (place1, place_type1, place2, place_type2, initial_date){
-  list(covid(place1, place_type1, initial_date), covid(place2, place_type2, initial_date))
+compare <- function (place1, place_type1, place2, place_type2, initial_date, end_date){
+  list(covid(place1, place_type1, initial_date, end_date), covid(place2, place_type2, initial_date, end_date))
 }
 
 ## Epidemic profile by place
